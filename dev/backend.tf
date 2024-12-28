@@ -1,8 +1,8 @@
-# terraform {
-#   backend "s3" {
-#     bucket = "terraformstatebucketeks"
-#     key = "terraform/docker"
-#     region = "us-east-1"
-#   }
-# }
+terraform {
+  backend "s3" {
+    bucket = "state_bucket"
+    key = "state_key"
+    region = "us-east-1"
+  }
+}
 
