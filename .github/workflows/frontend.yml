@@ -1,0 +1,20 @@
+name: Build Backend
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - integration
+    paths:
+      - "frontend/**"
+      - "!frontend/*.md"
+
+jobs:
+  Build:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+  
+        
