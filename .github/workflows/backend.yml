@@ -102,8 +102,8 @@ jobs:
 
       - name: Load Docker Image
         run: |
-            gunzip -f ./${GITHUB_REPOSITORY//\//-}-$DOCKER_TAG.tar.gz
-            docker load < ./${GITHUB_REPOSITORY//\//-}-$DOCKER_TAG.tar
+            gunzip -f ./${DOCKER_IMAGE//\//-}-$DOCKER_TAG.tar.gz
+            docker load < ./${DOCKER_IMAGE//\//-}-$DOCKER_TAG.tar
 
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@0.28.0
