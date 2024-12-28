@@ -10,6 +10,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  pull-requests: write
 
 env:
     TF_VAR_domain: ${{ secrets.DOMAIN }}
@@ -72,6 +73,7 @@ jobs:
               const commentBody = `**Terraform Plan Output:**\n\`\`\`hcl\n${planOutput}\n\`\`\``;
 
               github.rest.issues.createComment({
+                issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 body: commentBody
