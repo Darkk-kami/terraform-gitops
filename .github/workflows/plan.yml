@@ -70,14 +70,13 @@ jobs:
               const planOutput = fs.readFileSync('/tmp/plan.txt', 'utf8'); // Read the Terraform plan file
                
               const commentBody = `**Terraform Plan Output:**\n\`\`\`hcl\n${planOutput}\n\`\`\``;
-     
-              const issue_number = context.issue.number;
 
-              await github.rest.issues.createComment({
-                ...context.repo,
-                issue_number,
+              github.rest.issues.createComment({
+                owner: context.repo.owner,
+                issue_number: context.issue_number,
+                repo: context.repo.repo,
                 body: commentBody
-              });
+              })
     
 
 
