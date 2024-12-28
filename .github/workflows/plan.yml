@@ -53,13 +53,29 @@ jobs:
             terraform -chdir=dev plan -out=tfplan
 
         - name: Generate Terraform Plan JSON
-          run: terraform -chdir=dev show -json tfplan > plan.json
+          run: terraform -chdir=dev show -no-color tfplan > /tmp/plan.txt
 
         - name: Upload Plan as Artifact
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
            name: Terraform Plan
-           path: plan.json
+           path: /tmp/plan.txt
+
+        - name: Post Terraform Plan as Comment
+          uses: actions/github-script@v6
+          with:
+            script: |
+              const fs = require('fs');
+              const planOutput = fs.readFileSync('/tmp/plan.txt', 'utf8'); // Read the Terraform plan file
+               
+              const commentBody = `**Terraform Plan Output:**\n\`\`\`hcl\n${planOutput}\n\`\`\``;
+     
+              const issue_number = context.issue.number;
+              await github.issues.createComment({
+                ...context.repo,
+                issue_number,
+                body: commentBody
+              });
     
 
 
