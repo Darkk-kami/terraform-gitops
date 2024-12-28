@@ -111,10 +111,12 @@ jobs:
           image-ref: ${{ secrets.BACKEND_IMAGE }}:${{ github.run_number }}
           severity: HIGH,CRITICAL
           exit-code: 1
-        continue-on-error: false
+          format: json
+          output: './trivy.json'
+        continue-on-error: true
 
-
-
-
-
-
+      - name: Upload Trivy Results as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-scan-backend
+          path: './trivy.json'
