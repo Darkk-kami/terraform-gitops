@@ -2,6 +2,7 @@ name: Build Backend
 
 on:
   workflow_dispatch:
+    
   push:
     branches:
       - integration
@@ -76,6 +77,9 @@ jobs:
 
       - name: Debug - List Files
         run: ls -lah backend
+
+      - name: Debug Artifact Path
+        run: echo "backend/${DOCKER_IMAGE//\//-}-$DOCKER_TAG.tar.gz"
 
       - name: Upload Docker Image Artifact
         uses: actions/upload-artifact@v3
