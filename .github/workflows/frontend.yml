@@ -1,4 +1,4 @@
-name: Build Backend
+name: Build Frontend
 
 on:
   workflow_dispatch:
@@ -51,7 +51,7 @@ jobs:
           npm run build
         
   Build:
-    name: Build Backend
+    name: Build Frontend
     runs-on: ubuntu-latest
     needs: [Test]
 
@@ -68,12 +68,12 @@ jobs:
           docker build -t $DOCKER_IMAGE:$DOCKER_TAG .
           docker images
           docker save $DOCKER_IMAGE:$DOCKER_TAG | gzip > ${DOCKER_IMAGE//\//-}-$DOCKER_TAG.tar.gz
-          echo "artifact_path=backend/${DOCKER_IMAGE//\//-}-$DOCKER_TAG.tar.gz" >> $GITHUB_ENV
+          echo "artifact_path=frontend/${DOCKER_IMAGE//\//-}-$DOCKER_TAG.tar.gz" >> $GITHUB_ENV
 
       - name: Upload Docker Image Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: backend-image
+          name: frontend-image
           path: ${{ env.artifact_path }}
           retention-days: 1
 
@@ -86,7 +86,7 @@ jobs:
       - name: Download Image Artifact
         uses: actions/download-artifact@v4
         with:
-          name: backend-image
+          name: frontend-image
 
       - name: Debug - List files after download
         run: ls -lah
