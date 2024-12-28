@@ -11,6 +11,10 @@ permissions:
   id-token: write
   contents: read
 
+env:
+    TF_VAR_domain: ${{ secrets.DOMAIN }}
+    TF_VAR_email: ${{ secrets.EMAIL }}
+
 jobs:
 
   plan:
