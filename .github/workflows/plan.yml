@@ -38,8 +38,9 @@ jobs:
           working-directory: "dev/"
           run: |
             sed -i \
-            -e "s/bucket = \".*\"/bucket = \"${{ secrets.BUCKET_NAME }}\"/" \
-            -e "s/key = \".*\"/key = \"${{ vars.STATE_KEY }}\"/" \
+            -e "s|bucket = \".*\"|bucket = \"${{ secrets.BUCKET_NAME }}\"|" \
+            -e "s|key = \".*\"|key = \"${{ vars.STATE_KEY }}\"|" \
+            -e "s|region = \".*\"|region = \"${{ secrets.REGION }}\"|" \
             backend.tf
 
         - name: Terraform Plan
