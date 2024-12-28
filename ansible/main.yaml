@@ -44,9 +44,9 @@
 
     - name: Move docker-compose.yml to parent directory
       ansible.builtin.command:
-        cmd: mv /app/dependencies/docker-compose.yaml /app/docker-compose.yaml
+        cmd: mv /app/dependencies/docker-compose-monitoring.yaml /app/docker-compose-monitoring.yaml
       args:
-        creates: /app/docker-compose.yaml
+        creates: /app/docker-compose-monitoring.yaml
 
     - name: Install Certbot and its dependencies
       ansible.builtin.apt:
@@ -71,6 +71,6 @@
 
     - name: Start Docker Compose
       ansible.builtin.command:
-        cmd: docker compose up -d
+        cmd: docker compose -f docker-compose-monitoring.yaml up -d
         chdir: /app
       changed_when: false
