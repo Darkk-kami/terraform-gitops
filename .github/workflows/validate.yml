@@ -1,0 +1,59 @@
+name: Terraform Validate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - infra_features
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  lint:
+    name: Terraform Linting
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Ceckout
+        uses: actions/checkout@v4
+
+      - name: Install Lint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+          
+      - name: Run Lint
+        run: |
+          tflint
+
+  validate:
+    name: Terraform Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ vars.TERRAFORM_VERSION }}
+          terraform_wrapper: false 
+
+      - name: Validate Terraform Files
+        run: |
+          terraform -chdir="dev" init
+          terraform -chdir="dev" validate
+
+      - name: Cache Terraform
+        uses: actions/cache@v3
+        with:
+          path: ~/.terraform
+          key: ${{ runner.os }}-terraform-${{ hashFiles('**/*.tf') }}
+          restore-keys: |
+            ${{ runner.os }}-terraform-
+
+
+
+        
