@@ -50,8 +50,19 @@ jobs:
         - name: Terraform Plan
           run: |
             terraform -chdir=dev init
-            terraform -chdir=dev plan 
+            terraform -chdir=dev plan -out=tfplan
 
+        - name: Generate Terraform Plan JSON
+          run: terraform -chdir=dev show -json tfplan > plan.json
+
+        - name: InfraCost Cost Estimate
+          run: infracost breakdown --path=plan.json --format=json --out-file=infracost-report.json
+
+        - name: Upload InfraCost Report as Artifact
+          uses: actions/upload-artifact@v3
+          with:
+           name: infracost-report
+           path: infracost-report.json
     
 
 
