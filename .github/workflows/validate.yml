@@ -43,8 +43,8 @@ jobs:
 
       - name: Validate Terraform Files
         run: |
-          terraform -chdir="dev" init
-          terraform -chdir="dev" validate
+          terraform -chdir="dev" init -backend=false
+          terraform -chdir="dev" validate 
 
       - name: Cache Terraform
         uses: actions/cache@v3
