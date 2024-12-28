@@ -17,4 +17,4 @@ run_command(["python", "./app/initial_data.py"])
 
 # Start uvicorn
 print("Starting the application with uvicorn...")
-subprocess.run(["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"], check=True)
+subprocess.Popen(["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"], check=True)
