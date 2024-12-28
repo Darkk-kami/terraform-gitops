@@ -1,0 +1,54 @@
+name: Build Backend
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - integration
+    paths:
+      - "backend/**"
+      - "!backend/*.md"
+
+jobs:
+  Test:
+    name: Build Backend
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:13
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: changethis123
+          POSTGRES_DB: app
+          POSTGRES_HOST: localhost
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python env
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+    
+      - name: Install Poetry
+        working-directory: backend
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          poetry install
+
+      - name: Start Application
+        working-directory: backend
+        run: |
+          poetry run python ./prestart.py
+
+      - name: Run Application Tests
+        working-directory: backend
+        run: |
+          poetry run pytest | tee /dev/null
+
+
+
