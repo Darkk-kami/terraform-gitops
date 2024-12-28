@@ -64,6 +64,7 @@ jobs:
         - name: Post Terraform Plan as Comment
           uses: actions/github-script@v6
           with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
               const fs = require('fs');
               const planOutput = fs.readFileSync('/tmp/plan.txt', 'utf8'); // Read the Terraform plan file
