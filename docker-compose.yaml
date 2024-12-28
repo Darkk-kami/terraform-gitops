@@ -5,7 +5,7 @@ services:
     ports:
       - '5173:5173'
     env_file:
-      - frontend/.env
+      - ./dependencies/env/.frontend-env
     logging:
       driver: json-file
       options:
@@ -18,7 +18,7 @@ services:
     ports:
       - '8000:8000'
     env_file:
-      - backend/.env
+      - ./dependencies/env/.backend-env
     logging:
       driver: json-file
       options:
@@ -34,7 +34,7 @@ services:
     ports:
       - '5432:5432'
     env_file:
-      - backend/.env
+      - ./dependencies/env/.backend-env
     logging:
       driver: json-file
       options:
@@ -61,11 +61,10 @@ services:
     restart: unless-stopped
     ports:
       - '80:80'
-      - '8090:81'
+      - '81:81'
       - '443:443'
     volumes:
-      - ./nginx/nginx-local.conf:/data/nginx/custom/http_top.conf
-      # - ./nginx/nginx.conf:/data/nginx/custom/http_top.conf 
+      - ./dependencies/nginx/nginx.conf:/data/nginx/custom/http_top.conf 
       - /etc/letsencrypt/:/etc/letsencrypt  
     depends_on:
       - frontend 
