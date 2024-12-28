@@ -72,7 +72,8 @@ jobs:
               const commentBody = `**Terraform Plan Output:**\n\`\`\`hcl\n${planOutput}\n\`\`\``;
      
               const issue_number = context.issue.number;
-              await github.issues.createComment({
+
+              await github.rest.issues.createComment({
                 ...context.repo,
                 issue_number,
                 body: commentBody
