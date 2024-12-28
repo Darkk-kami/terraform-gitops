@@ -108,13 +108,10 @@ jobs:
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@0.28.0
         with:
-            image-ref: $DOCKER_IMAGE:$DOCKER_TAG
-            severity: HIGH,CRITICAL
-            exit-code: 1
+          image-ref: ${{ secrets.BACKEND_IMAGE }}:${{ github.run_number }}
+          severity: HIGH,CRITICAL
+          exit-code: 1
         continue-on-error: false
-
-
-  
 
 
 
