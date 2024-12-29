@@ -86,7 +86,7 @@ jobs:
         with:
           host: ${{ secrets.ANSIBLE_IP }}
           username: ubuntu
-          key_path: docker.pem
+          key_path: "${{ github.workspace }}/docker.pem"
           source: "docker-compose.yaml"
           target: "~/"
           overwrite: true
