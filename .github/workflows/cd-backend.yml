@@ -78,8 +78,7 @@ jobs:
         run: |
           echo "${{ secrets.ANSIBLE_KEY }}" | base64 --decode > docker.pem
           ls -l docker.pem
-          chmod 400 docker.pem
-          cat docker.pem
+          chmod 600 docker.pem
           
       - name: Deploy to Server
         uses: appleboy/scp-action@v0.1.7
@@ -90,5 +89,6 @@ jobs:
           source: "docker-compose.yaml"
           target: "~/"
           overwrite: true
+          debug: true
           
 
