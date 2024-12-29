@@ -81,15 +81,15 @@ jobs:
           chmod 600 docker.pem
           ssh -o StrictHostKeyChecking=no -i docker.pem ubuntu@${{ secrets.ANSIBLE_IP }} "echo hi"
           
-      - name: Deploy to Server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.ANSIBLE_IP }}
-          username: ubuntu
-          key_path: "${{ github.workspace }}/docker.pem"
-          source: "docker-compose.yaml"
-          target: "~/"
-          overwrite: true
-          debug: true
+      - name: Copy Files to Remote Server
+        run: |
+          scp -o StrictHostKeyChecking=no -i docker.pem docker-compose.yaml ubuntu@${{ secrets.ANSIBLE_IP }}:~/ansible/dependencies/
+
+      - name: Run Ansible Playbook
+        run: |
+          ssh -o StrictHostKeyChecking=no -i docker.pem ubuntu@${{ secrets.ANSIBLE_IP }} << EOF
+            cd ~/ansible
+            ansible-playbook -i inventory.ini deploy.yaml
+          EOF
           
 
