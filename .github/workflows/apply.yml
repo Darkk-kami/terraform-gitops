@@ -67,5 +67,5 @@ jobs:
           with:
             name: ANSIBLE_IP
             value: ${{ env.ANSIBLE_IP }}
-            pa_token: ${{ secrets.GITHUB_TOKEN }}
+            pa_token: ${{ secrets.GH_TOKEN }}
   
