@@ -64,13 +64,28 @@ jobs:
           git commit -m "Update Docker Image Tag to ${{ secrets.BACKEND_IMAGE }}:1.${{ github.run_number }}"
           git pull --rebase origin $BRANCH_NAME
           git push origin $BRANCH_NAME
+          
+  Deploy:
+    name: Deploy and Trigger Ansible
+    needs: [Tag]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
+      - name: Recreate Docker PEM File
+        run: |
+          echo "${{ secrets.ANSIBLE_KEY }}" | base64 --decode > docker.pem
+          ls -l docker.pem
+          chmod 400 docker.pem
+          
       - name: Deploy to Server
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v1.2.0
         with:
           host: ${{ secrets.ANSIBLE_IP }}
           username: ubuntu
-          key: ${{ secrets.ANSIBLE_KEY }}
+          key_path: ./docker.pem
           source: "docker-compose.yaml"
           target: "~/"
           overwrite: true
