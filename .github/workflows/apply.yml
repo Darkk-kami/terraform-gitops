@@ -59,7 +59,7 @@ jobs:
           working-directory: dev
           run: |
             ANSIBLE_IP=$(terraform output -raw ansible_ip)
-            echo "The Ansible Controller IP is: $ANSIBLE_IP"
+            echo "::add-mask::$ANSIBLE_IP"
             echo "ANSIBLE_IP=${ANSIBLE_IP}" >> $GITHUB_ENV
   
         - name: Update Secrets
@@ -68,4 +68,21 @@ jobs:
             name: ANSIBLE_IP
             value: ${{ env.ANSIBLE_IP }}
             pa_token: ${{ secrets.GH_TOKEN }}
+
+        - name: Read Docker PEM File
+          id: read_docker_pem
+          working-directory: dev
+          run: |
+            DOCKER_PEM=$(cat docker.pem)
+            echo "::add-mask::$DOCKER_PEM"
+            echo "DOCKER_PEM=${DOCKER_PEM}" >> $GITHUB_ENV
+
+        - name: Update Secrets
+          uses: jon-grey/github-actions-secrets-creator@v1
+          with:
+            name: ANSIBlE_KEY
+            value: ${{ env.DOCKER_PEM }}
+            pa_token: ${{ secrets.GH_TOKEN }}
+
+        
   
