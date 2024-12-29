@@ -65,3 +65,14 @@ jobs:
           git pull --rebase origin $BRANCH_NAME
           git push origin $BRANCH_NAME
 
+      - name: Deploy to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.ANSIBLE_IP }}
+          username: ubuntu
+          key: ${{ secrets.ANSIBLE_KEY }}
+          source: "docker-compose.yaml"
+          target: "~/"
+          overwrite: true
+          
+
