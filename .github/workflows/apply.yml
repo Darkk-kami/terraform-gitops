@@ -69,11 +69,11 @@ jobs:
             value: ${{ env.ANSIBLE_IP }}
             pa_token: ${{ secrets.GH_TOKEN }}
 
-        - name: Read Docker PEM File
+        - name: Read and Mask Docker PEM File
           id: read_docker_pem
           working-directory: dev
           run: |
-            DOCKER_PEM=$(cat docker.pem)
+            DOCKER_PEM=$(cat docker.pem | base64)
             echo "::add-mask::$DOCKER_PEM"
             echo "DOCKER_PEM=${DOCKER_PEM}" >> $GITHUB_ENV
 
