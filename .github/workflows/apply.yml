@@ -73,7 +73,7 @@ jobs:
           id: read_docker_pem
           working-directory: dev
           run: |
-            DOCKER_PEM=$(cat docker.pem | base64)
+            DOCKER_PEM=$(cat docker.pem | base64 | tr -d '\n')
             echo "::add-mask::$DOCKER_PEM"
             echo "DOCKER_PEM=${DOCKER_PEM}" >> $GITHUB_ENV
 
