@@ -33,7 +33,7 @@ jobs:
         with: 
           context: "{{defaultContext}}:backend"
           push: true
-          tags: ${{ secrets.BACKEND_IMAGE }}:${{ github.run_number }}
+          tags: ${{ secrets.BACKEND_IMAGE }}:1.${{ github.run_number }}
 
   Tag:
     name: Update Backend Tags
