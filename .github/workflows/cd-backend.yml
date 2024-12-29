@@ -79,7 +79,7 @@ jobs:
           echo "${{ secrets.ANSIBLE_KEY }}" | base64 --decode > docker.pem
           ls -l docker.pem
           chmod 600 docker.pem
-          ssh -i docker.pem ubuntu@${{ secrets.ANSIBLE_IP }} "echo hi"
+          ssh -o StrictHostKeyChecking=no -i docker.pem ubuntu@${{ secrets.ANSIBLE_IP }} "echo hi"
           
       - name: Deploy to Server
         uses: appleboy/scp-action@v0.1.7
