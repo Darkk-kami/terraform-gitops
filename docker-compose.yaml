@@ -1,7 +1,7 @@
 services:
 
   frontend:
-    build: ./frontend
+    image: frontend-image
     ports:
       - '5173:5173'
     env_file:
@@ -14,7 +14,7 @@ services:
       - app-network
 
   backend:
-    build: ./backend
+    image: backend-image
     ports:
       - '8000:8000'
     env_file:
