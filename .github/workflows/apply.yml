@@ -66,6 +66,6 @@ jobs:
           uses: jon-grey/github-actions-secrets-creator@v1
           with:
             name: ANSIBLE_IP
-            value: {{ env.ANSIBLE_IP }}
+            value: ${{ env.ANSIBLE_IP }}
             pa_token: ${{ secrets.GITHUB_TOKEN }}
   
