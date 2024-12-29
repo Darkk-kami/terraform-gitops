@@ -1,0 +1,84 @@
+name: Terraform Plan
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - infra_main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+env:
+    TF_VAR_domain: ${{ secrets.DOMAIN }}
+    TF_VAR_email: ${{ secrets.EMAIL }}
+
+jobs:
+
+  plan:
+      name: Terraform Plan
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+
+        - name: Setup Terraform
+          uses: hashicorp/setup-terraform@v2
+          with:
+            terraform_version: ${{ vars.TERRAFORM_VERSION }}
+            terraform_wrapper: false
+
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            role-to-assume: ${{ secrets.ASSUME_ROLE }}
+            role-session-name: github-action-role
+            aws-region: ${{ secrets.REGION }}
+
+        - name: Setup Backend
+          working-directory: "dev/"
+          run: |
+            sed -i \
+            -e "s|bucket = \".*\"|bucket = \"${{ secrets.BUCKET_NAME }}\"|" \
+            -e "s|key = \".*\"|key = \"${{ vars.STATE_KEY }}\"|" \
+            -e "s|region = \".*\"|region = \"${{ secrets.REGION }}\"|" \
+            backend.tf
+
+        - name: Terraform Plan
+          run: |
+            terraform -chdir=dev init
+            terraform -chdir=dev plan -out=tfplan
+
+        - name: Generate Terraform Plan JSON
+          run: terraform -chdir=dev show -no-color tfplan > /tmp/plan.txt
+
+        - name: Upload Plan as Artifact
+          uses: actions/upload-artifact@v4
+          with:
+           name: Terraform Plan
+           path: /tmp/plan.txt
+
+        - name: Post Terraform Plan as Comment
+          uses: actions/github-script@v6
+          with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            script: |
+              const fs = require('fs');
+              const planOutput = fs.readFileSync('/tmp/plan.txt', 'utf8'); // Read the Terraform plan file
+               
+              const commentBody = `**Terraform Plan Output:**\n\`\`\`hcl\n${planOutput}\n\`\`\``;
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: commentBody
+              })
+    
+
+
+

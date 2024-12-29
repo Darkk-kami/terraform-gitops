@@ -38,6 +38,12 @@ resource "local_file" "docker_compose" {
   })
 }
 
+resource "local_file" "docker_compose_monitoring" {
+  filename = "${path.module}/../../dependencies/docker-compose-monitoring.yaml"
+  content  = templatefile("${path.module}/../../templates/docker-compose-monitoring.tpl", {
+    domain = var.domain
+  })
+}
 
 
 

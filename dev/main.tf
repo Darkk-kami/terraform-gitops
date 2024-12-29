@@ -24,7 +24,7 @@ module "compute" {
   instance_type = "t2.medium"
   private_key = module.sshkey.private_key
   tls_key = module.sshkey.tls_key
-
+  environment = "dev"
 }
 
 
