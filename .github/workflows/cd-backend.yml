@@ -81,7 +81,7 @@ jobs:
           chmod 400 docker.pem
           
       - name: Deploy to Server
-        uses: appleboy/ssh-action@v1.2.0
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.ANSIBLE_IP }}
           username: ubuntu
