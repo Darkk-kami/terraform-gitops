@@ -79,6 +79,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Pull Latest Changes
+        run: |
+          git pull origin ${{ github.ref_name }}
+
       - name: Recreate Docker PEM File
         run: |
           echo "${{ secrets.ANSIBLE_KEY }}" | base64 --decode > docker.pem
