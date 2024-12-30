@@ -42,7 +42,7 @@
         group: root
         mode: '0755'
 
-    - name: Move docker-compose.yml to parent directory
+    - name: Move docker-compose-monitoring.yml to parent directory
       ansible.builtin.command:
         cmd: mv /app/dependencies/docker-compose-monitoring.yaml /app/docker-compose-monitoring.yaml
       args:

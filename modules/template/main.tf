@@ -30,14 +30,6 @@ resource "local_file" "backend_var" {
   })
 }
 
-# Generate docker compose file
-resource "local_file" "docker_compose" {
-  filename = "${path.module}/../../dependencies/docker-compose.yaml"
-  content  = templatefile("${path.module}/../../templates/docker-compose.tpl", {
-    domain = var.domain
-  })
-}
-
 resource "local_file" "docker_compose_monitoring" {
   filename = "${path.module}/../../dependencies/docker-compose-monitoring.yaml"
   content  = templatefile("${path.module}/../../templates/docker-compose-monitoring.tpl", {
