@@ -12,7 +12,7 @@ data "aws_ami" "ubuntu" {
 
 # EC2 instance for application
 resource "aws_instance" "app_instance" {
-  count = var.instance_count  # Number of instances to create
+  count = var.instance_count  
 
   instance_type          = var.environment == "dev" ? "t2.micro" : "t2.medium"
   iam_instance_profile   = var.instance_profile.id
