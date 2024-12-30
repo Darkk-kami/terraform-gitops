@@ -14,7 +14,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "app_instance" {
   count = var.instance_count  
 
-  instance_type          = var.environment == "dev" ? "t2.micro" : "t2.medium"
+  instance_type          =  var.instance_type
   iam_instance_profile   = var.instance_profile.id
   ami                   = data.aws_ami.ubuntu.id
   subnet_id             = var.subnet_id[count.index % length(var.subnet_id)]
