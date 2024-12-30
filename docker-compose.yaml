@@ -14,7 +14,7 @@ services:
       - app-network
 
   backend:
-    image: darkkami/backend-template:1.16
+    image: darkkami/backend-template:1.20
     ports:
       - '8000:8000'
     env_file:
