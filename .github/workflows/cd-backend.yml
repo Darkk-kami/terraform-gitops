@@ -120,4 +120,3 @@ jobs:
             cd ~/ansible
             ansible-playbook -i inventory.ini deploy.yaml
           EOF  
-
