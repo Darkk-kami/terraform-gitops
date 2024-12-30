@@ -97,7 +97,7 @@ jobs:
 
       - name: Run Ansible Playbook
         run: |
-          ssh -o StrictHostKeyChecking=no -i docker.pem ubuntu@${{ secrets.ANSIBLE_IP }} << EOF
+          ssh -o StrictHostKeyChecking=no -i docker.pem ubuntu@${{ secrets.ANSIBLE_IP }} << 'EOF'
             cd ~/ansible
             ansible-playbook -i inventory.ini deploy.yaml
           EOF
