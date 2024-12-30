@@ -59,6 +59,11 @@ services:
     image: jc21/nginx-proxy-manager
     container_name: proxy
     restart: unless-stopped
+    depends_on:
+      - database
+      - backend
+      - frontend
+      - adminer
     ports:
       - '80:80'
       - '81:81'
