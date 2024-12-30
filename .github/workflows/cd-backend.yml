@@ -3,6 +3,8 @@ name: Deploy Backend
 permissions:
   contents: write
 
+concurrency:
+  group: push-${{ github.ref }}
 
 on:
   workflow_dispatch:
@@ -64,4 +66,30 @@ jobs:
           git commit -m "Update Docker Image Tag to ${{ secrets.BACKEND_IMAGE }}:1.${{ github.run_number }}"
           git pull --rebase origin $BRANCH_NAME
           git push origin $BRANCH_NAME
+
+  Deploy:
+    name: Deploy and Trigger Ansible
+    needs: [Tag]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Recreate Docker PEM File
+        run: |
+          echo "${{ secrets.ANSIBLE_KEY }}" | base64 --decode > docker.pem
+          ls -l docker.pem
+          chmod 600 docker.pem
+          ssh -o StrictHostKeyChecking=no -i docker.pem ubuntu@${{ secrets.ANSIBLE_IP }} "echo hi"
+          
+      - name: Copy Files to Remote Server
+        run: |
+          scp -o StrictHostKeyChecking=no -i docker.pem docker-compose.yaml ubuntu@${{ secrets.ANSIBLE_IP }}:~/ansible/dependencies/
+      - name: Run Ansible Playbook
+        run: |
+          ssh -o StrictHostKeyChecking=no -i docker.pem ubuntu@${{ secrets.ANSIBLE_IP }} << EOF
+            cd ~/ansible
+            ansible-playbook -i inventory.ini deploy.yaml
+          EOF  
 
