@@ -2,3 +2,4 @@
 terraform.tfstate
 dev/.terraform.lock.hcl
 dev/.terraform
+dev/terraform.tfvars
