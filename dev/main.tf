@@ -21,12 +21,11 @@ module "compute" {
   subnet_id = module.network.subnet_ids
   ansible_controller-sg = module.network.ansible_sg_id
   instance_profile = module.route53.ec2_instance_profile
-  instance_type = "t2.medium"
+  instance_type = "t2.large"
   private_key = module.sshkey.private_key
   tls_key = module.sshkey.tls_key
   environment = "dev"
 }
-
 
 module "ansible" {
   source = "../modules/ansible"
