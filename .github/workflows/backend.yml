@@ -48,7 +48,13 @@ jobs:
       - name: Start Application
         working-directory: backend
         run: |
-          poetry run python ./prestart.py
+          nohup poetry run python ./prestart.py > app.log 2>&1 & echo $! > app.pid
+          sleep 5 # Wait for the application to initialize
+          if ! pgrep -F app.pid; then
+            echo "Application failed to start."
+            cat app.log
+            exit 1
+          fi
 
       - name: Run Application Tests
         working-directory: backend
