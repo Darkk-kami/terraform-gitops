@@ -24,7 +24,7 @@ variable "subnet_id" {
 variable "instance_count" {
   description = "number of instances"
   type = number
-  default = 1
+  default = 2
 }
 
 variable "ansible_controller-sg" {
